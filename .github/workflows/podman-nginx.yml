@@ -1,0 +1,37 @@
+name: Podman Nginx on macOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-nginx:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Podman
+      run: |
+        brew install podman
+
+    - name: Setup Podman
+      run: |
+        podman machine init
+        podman machine start
+
+    - name: Pull Nginx Image
+      run: |
+        podman pull nginx:latest
+
+    - name: Run Nginx Container
+      run: |
+        podman run -d -p 8080:80 nginx:latest
+
+    - name: Test Nginx Container
+      run: |
+        sleep 10 # Wait for Nginx to start
+        curl http://localhost:8080
