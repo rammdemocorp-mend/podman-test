@@ -17,6 +17,7 @@ jobs:
     - name: Install Podman
       run: |
         brew install podman
+        brew install --cask podman-desktop
 
     - name: init Podman
       run: |
