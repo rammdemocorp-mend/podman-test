@@ -18,9 +18,12 @@ jobs:
       run: |
         brew install podman
 
-    - name: Setup Podman
+    - name: init Podman
       run: |
         podman machine init
+
+    - name: start Podman
+      run: |
         podman machine start
 
     - name: Pull Nginx Image
