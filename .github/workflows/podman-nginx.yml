@@ -14,16 +14,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install Docker
+    - name: Install Podman
       run: |
-        brew install --cask docker
-        open /Applications/Docker.app
+        brew install podman
 
-    - name: Run Podman in Docker
+    - name: Setup Podman
       run: |
-        docker run --privileged --name podman-container -d quay.io/podman/stable:latest sleep infinity
-        docker exec podman-container podman pull nginx:latest
-        docker exec -d podman-container podman run -d -p 8080:80 nginx:latest
+        podman machine init
+        podman machine start
+
+    - name: Pull Nginx Image
+      run: |
+        podman pull nginx:latest
+
+    - name: Run Nginx Container
+      run: |
+        podman run -d -p 8080:80 nginx:latest
 
     - name: Test Nginx Container
       run: |
